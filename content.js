@@ -1,10 +1,10 @@
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === 'executeScript') {
-    try {
-      const result = eval(message.code);
-      sendResponse({ success: true, result });
-    } catch (error) {
-      sendResponse({ success: false, error: error.message });
-    }
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  if (request.type === 'executeScript') {
+    var script = document.createElement('script');
+    script.textContent = request.code;
+    (document.head||document.documentElement).appendChild(script);
+    script.remove();
+    sendResponse({success: true});
+    return true;
   }
 });
